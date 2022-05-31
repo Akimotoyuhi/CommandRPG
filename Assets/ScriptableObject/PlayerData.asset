@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af7d5fdbda42ba2469a3db95cea7d0ee, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  m_data:
+  m_dataBases:
   - m_name: "\u4F50\u3005\u6728"
     m_sprite: {fileID: 21300000, guid: 4a2ecc8860c681a4bac68380ff360700, type: 3}
     m_life: 100
     m_magicPoint: 100
-    m_power: 50
-    m_magicPower: 50
+    m_power: 10
+    m_magicPower: 10
     m_defence: 10
     m_magicDefence: 10
     m_speed: 5

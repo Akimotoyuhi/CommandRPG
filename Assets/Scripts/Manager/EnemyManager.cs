@@ -10,7 +10,7 @@ public class EnemyManager : CharactorManager
 
     public override void Setup()
     {
-
+        Create();
     }
 
     protected override void OnDead()
