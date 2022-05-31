@@ -9,5 +9,6 @@ public class BattleManager : MonoBehaviour
     public void Setup()
     {
         m_playerManager.Setup();
+        m_enemyManager.Setup();
     }
 }

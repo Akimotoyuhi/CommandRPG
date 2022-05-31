@@ -10,9 +10,6 @@ public abstract class Charactor : MonoBehaviour
     #region field
     [SerializeField] protected Image m_image;
     [SerializeField] protected Slider m_lifeSlider;
-    [SerializeField] protected Text m_lifeSliderText;
-    [SerializeField] protected Slider m_magicSlider;
-    [SerializeField] protected Text m_magicSliderText;
     protected int m_maxLife;
     protected int m_currentLife;
     protected int m_maxMagicPoint;
@@ -29,8 +26,10 @@ public abstract class Charactor : MonoBehaviour
     public IObservable<Unit> DeadSubject => m_deadSubject;
     #endregion
 
-    public virtual void Setup()
+    public virtual void Setup(CharactorDataBase dataBase)
     {
+        SetParametor(dataBase);
+        SetUI();
     }
 
     /// <summary>
@@ -51,15 +50,7 @@ public abstract class Charactor : MonoBehaviour
         m_image.sprite = dataBase.Sprite;
     }
 
-    protected virtual void SetSlider()
-    {
-        m_lifeSlider.maxValue = m_maxLife;
-        m_lifeSlider.value = m_currentLife;
-        m_lifeSliderText.text = m_currentLife.ToString();
-        m_magicSlider.maxValue = m_maxMagicPoint;
-        m_magicSlider.value = m_currentMagicPoint;
-        m_magicSliderText.text = m_currentMagicPoint.ToString();
-    }
+    protected abstract void SetUI();
 
     /// <summary>
     /// éÄñSéûÇÃèàóù

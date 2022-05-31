@@ -5,10 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerData")]
 public class PlayerData : ScriptableObject
 {
-    [SerializeField] List<CharactorDataBase> m_data;
-    public List<CharactorDataBase> Data => m_data;
+    [SerializeField] List<CharactorDataBase> m_dataBases;
+    public List<CharactorDataBase> DataBases => m_dataBases;
 }
 
+/// <summary>
+/// 各キャラクターの基本ステータス
+/// </summary>
 [System.Serializable]
 public class CharactorDataBase
 {
