@@ -6,23 +6,29 @@ using UniRx;
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField] Player m_playerPrefab;
-    public Player CurrentPlayer { get; private set; }
+    [SerializeField] Transform m_playerPos;
+    private const int m_playerNum = 4;
+    public List<Player> CurrentPlayers { get; private set; } = new List<Player>();
 
     public void Setup()
     {
-
+        for (int i = 0; i < m_playerNum; i++)
+            CreatePlayer();
     }
 
     private void PlayerDead()
     {
-        CreatePlayer();
+
     }
 
     private void CreatePlayer()
     {
-        CurrentPlayer = Instantiate(m_playerPrefab);
-        CurrentPlayer.DeadSubject
+        Player p = Instantiate(m_playerPrefab);
+        p.transform.SetParent(m_playerPos);
+        p.Setup();
+        p.DeadSubject
             .Subscribe(x => PlayerDead())
             .AddTo(this);
+        CurrentPlayers.Add(p);
     }
 }
