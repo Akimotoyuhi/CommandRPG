@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerData")]
 public class PlayerData : ScriptableObject
 {
-    [SerializeField] List<CharactorDataBase> m_dataBases;
-    public List<CharactorDataBase> DataBases => m_dataBases;
+    [SerializeField] List<PlayerDataBase> m_dataBases;
+    public List<PlayerDataBase> DataBases => m_dataBases;
 }
 
 /// <summary>
@@ -33,4 +33,18 @@ public class CharactorDataBase
     public int Defence => m_defence;
     public int MagicDefence => m_magicDefence;
     public float Speed => m_speed;
+}
+[System.Serializable]
+public class PlayerDataBase
+{
+    [SerializeField] CharactorDataBase m_dataBase;
+    [SerializeField] PlayerSkillData m_skillData;
+    public CharactorDataBase DataBase => m_dataBase;
+    public PlayerSkillData SkillData => m_skillData;
+}
+[System.Serializable]
+public class PlayerSkillData
+{
+    [SerializeField] List<SkillID> m_haveSkills;
+    public List<SkillID> HaveSkills => m_haveSkills;
 }

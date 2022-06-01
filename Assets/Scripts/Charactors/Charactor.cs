@@ -10,6 +10,7 @@ public abstract class Charactor : MonoBehaviour
     #region field
     [SerializeField] protected Image m_image;
     [SerializeField] protected Slider m_lifeSlider;
+    protected string m_name;
     protected int m_maxLife;
     protected int m_currentLife;
     protected int m_maxMagicPoint;
@@ -26,9 +27,8 @@ public abstract class Charactor : MonoBehaviour
     public IObservable<Unit> DeadSubject => m_deadSubject;
     #endregion
 
-    public virtual void Setup(CharactorDataBase dataBase)
+    protected virtual void Setup()
     {
-        SetParametor(dataBase);
         SetUI();
     }
 
@@ -51,6 +51,8 @@ public abstract class Charactor : MonoBehaviour
     }
 
     protected abstract void SetUI();
+
+    public abstract void OnAction();
 
     /// <summary>
     /// €–S‚Ìˆ—

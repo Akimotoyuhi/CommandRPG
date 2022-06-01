@@ -12,4 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21d8559cff8cc8c4f81312710bd99be6, type: 3}
   m_Name: SkillData
   m_EditorClassIdentifier: 
-  m_dataBases: []
+  m_dataBases:
+  - m_name: "\u901A\u5E38\u653B\u6483"
+    m_id: 0
+    m_command:
+    - rid: 2058801464653119489
+  references:
+    version: 2
+    RefIds:
+    - rid: 2058801464653119489
+      type: {class: AttackSkill, ns: , asm: Assembly-CSharp}
+      data:
+        m_useType: 1
+        m_attackType: 0
+        m_damageCoefficient: 100

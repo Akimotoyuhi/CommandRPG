@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   m_dataBases:
-  - m_name: "\u4F50\u3005\u6728"
-    m_sprite: {fileID: 21300000, guid: 4a2ecc8860c681a4bac68380ff360700, type: 3}
-    m_life: 100
-    m_magicPoint: 100
-    m_power: 10
-    m_magicPower: 10
-    m_defence: 10
-    m_magicDefence: 10
-    m_speed: 5
+  - m_dataBase:
+      m_name: "\u4F50\u3005\u6728"
+      m_sprite: {fileID: 21300000, guid: 4a2ecc8860c681a4bac68380ff360700, type: 3}
+      m_life: 100
+      m_magicPoint: 100
+      m_power: 0
+      m_magicPower: 0
+      m_defence: 0
+      m_magicDefence: 0
+      m_speed: 0
+    m_skillData:
+      m_haveSkills: 00000000

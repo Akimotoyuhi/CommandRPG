@@ -21,7 +21,7 @@ public class EnemyManager : CharactorManager
     {
         Enemy e = Instantiate(m_enemyPrefab);
         e.transform.SetParent(m_prefabPos);
-        e.Setup(GameManager.Instance.EnemyData.DataBases[0].DataBase);
+        e.SetBaseData(GameManager.Instance.EnemyData.DataBases[0]);
         e.DeadSubject
             .Subscribe(x => OnDead())
             .AddTo(this);

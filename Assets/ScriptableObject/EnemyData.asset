@@ -24,6 +24,8 @@ MonoBehaviour:
       m_magicDefence: 3
       m_speed: 3
     m_aiList:
-    - m_evaluationParametorType: 0
-      m_evaluationType: 0
-      value: 0
+    - m_aiList:
+      - m_evaluationParametorType: 0
+        m_evaluationType: 0
+        value: 0
+      m_skillList: 00000000

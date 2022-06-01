@@ -8,9 +8,10 @@ public class Player : Charactor
     [SerializeField] Text m_lifeSliderText;
     [SerializeField] Slider m_magicSlider;
     [SerializeField] Text m_magicSliderText;
-    public override void Setup(CharactorDataBase dataBase)
+    private PlayerDataBase m_playerDataBase;
+    protected override void Setup()
     {
-        base.Setup(dataBase);
+        
     }
 
     protected override void SetUI()
@@ -21,6 +22,16 @@ public class Player : Charactor
         m_magicSlider.maxValue = m_maxMagicPoint;
         m_magicSlider.value = m_currentMagicPoint;
         m_magicSliderText.text = m_currentMagicPoint.ToString();
+    }
+
+    public void SetBaseData(PlayerDataBase playerDataBase)
+    {
+        SetParametor(m_playerDataBase.DataBase);
+        base.Setup();
+    }
+
+    public override void OnAction()
+    {
     }
 
     protected override void Dead()
