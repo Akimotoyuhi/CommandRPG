@@ -7,6 +7,15 @@ public class SkillData : ScriptableObject
 {
     [SerializeField] List<SkillDataBase> m_dataBases;
     public List<SkillDataBase> DataBases => m_dataBases;
+    public SkillDataBase GetSkillData(SkillID skillID)
+    {
+        foreach (var item in m_dataBases)
+        {
+            if (item.Id == skillID)
+                return item;
+        }
+        throw new System.IndexOutOfRangeException($"使用されていないIDが使用されました 渡されたID{skillID}(IDNumber{(int)skillID})");
+    }
 }
 
 [System.Serializable]

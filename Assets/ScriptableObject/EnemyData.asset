@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_dataBases:
   - m_dataBase:
-      m_name: aaaaa
-      m_sprite: {fileID: 0}
+      m_name: "\u30B9\u30E9\u30A4\u30E0"
+      m_sprite: {fileID: 21300000, guid: 491269d0b48f4b54797a211d8e965421, type: 3}
       m_life: 30
-      m_magicPoint: 3
-      m_power: 3
-      m_magicPower: 3
-      m_defence: 3
-      m_magicDefence: 3
-      m_speed: 3
+      m_magicPoint: 30
+      m_power: 5
+      m_magicPower: 5
+      m_defence: 10
+      m_magicDefence: 0
+      m_speed: 1
     m_aiList:
     - m_aiList:
       - m_evaluationParametorType: 0

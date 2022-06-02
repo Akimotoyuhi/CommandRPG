@@ -11,7 +11,7 @@ public class SkillButton : MonoBehaviour
     [SerializeField] Image m_image;
     private SkillID m_skillId;
     private string m_name;
-    private readonly AsyncSubject<SkillID> m_onclickSubject = new AsyncSubject<SkillID>();
+    private Subject<SkillID> m_onclickSubject = new Subject<SkillID>();
     public bool IsActive { get; set; }
     public System.IObservable<SkillID> OnClickSubject => m_onclickSubject;
 
@@ -20,14 +20,14 @@ public class SkillButton : MonoBehaviour
         if (skillDataBase == null)
         {
             m_button.enabled = false;
-            m_image.color = Color.white;
+            m_image.color = Color.clear;
             m_text.text = "";
         }
         else
         {
-            Debug.Log($"SkillID{skillDataBase.Id}");
             m_skillId = skillDataBase.Id;
             m_name = skillDataBase.Name;
+            m_image.color = Color.white;
             m_text.text = m_name;
             m_button.enabled = true;
         }
@@ -36,6 +36,5 @@ public class SkillButton : MonoBehaviour
     public void OnClick()
     {
         m_onclickSubject.OnNext(m_skillId);
-        m_onclickSubject.OnCompleted();
     }
 }

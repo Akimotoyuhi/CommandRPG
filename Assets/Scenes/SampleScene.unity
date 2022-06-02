@@ -476,7 +476,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 51357018}
         m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
-        m_MethodName: OnBattle
+        m_MethodName: OnSkillSelect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -20,7 +20,11 @@ public class GUIManager : MonoBehaviour
             SkillButton s = Instantiate(m_skillButtonPrefab);
             s.Setup();
             s.OnClickSubject
-                .Subscribe(_ => Debug.Log(_))
+                .Subscribe(_ =>
+                {
+                    m_skillPanel.SetActive(false);
+                    m_battleManager.SkillSelected(_);
+                })
                 .AddTo(this);
             s.transform.SetParent(m_buttonParent);
             m_skillButtons.Add(s);
@@ -28,6 +32,7 @@ public class GUIManager : MonoBehaviour
         m_battleManager.ShowSkillSubject
             .Subscribe(_ => ShowSkills(_))
             .AddTo(this);
+
         m_skillPanel.SetActive(false);
     }
 

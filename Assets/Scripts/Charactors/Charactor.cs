@@ -21,7 +21,7 @@ public abstract class Charactor : MonoBehaviour
     protected int m_magicDefence;
     protected float m_speed;
     private bool m_isDead = false;
-    private readonly AsyncSubject<Unit> m_deadSubject = new AsyncSubject<Unit>();
+    private AsyncSubject<Unit> m_deadSubject = new AsyncSubject<Unit>();
     #endregion
     #region property
     public IObservable<Unit> DeadSubject => m_deadSubject;
