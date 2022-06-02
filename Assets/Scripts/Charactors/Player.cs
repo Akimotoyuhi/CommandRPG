@@ -9,6 +9,9 @@ public class Player : Charactor
     [SerializeField] Slider m_magicSlider;
     [SerializeField] Text m_magicSliderText;
     private PlayerDataBase m_playerDataBase;
+    private List<SkillID> m_haveSkills = new List<SkillID>();
+    public List<SkillID> HaveSkills => m_haveSkills;
+
     protected override void Setup()
     {
         
@@ -26,7 +29,8 @@ public class Player : Charactor
 
     public void SetBaseData(PlayerDataBase playerDataBase)
     {
-        SetParametor(m_playerDataBase.DataBase);
+        SetParametor(playerDataBase.DataBase);
+        m_haveSkills = playerDataBase.SkillData.HaveSkills;
         base.Setup();
     }
 

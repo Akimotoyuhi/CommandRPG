@@ -14,8 +14,12 @@ public class SkillDataBase
 {
     [SerializeField] string m_name;
     [SerializeField] SkillID m_id;
+    [SerializeField, TextArea] string m_tooltip;
+    [SerializeField] int m_consumptionMp;
     [SerializeReference, SubclassSelector] List<ISkillCommand> m_command;
     public string Name => m_name;
+    public SkillID Id => m_id;
+    public string Tooltip => m_tooltip;
     public List<Command> SkillCommand
     {
         get

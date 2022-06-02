@@ -15,6 +15,8 @@ MonoBehaviour:
   m_dataBases:
   - m_name: "\u901A\u5E38\u653B\u6483"
     m_id: 0
+    m_tooltip: "\u65751\u4F53\u306B\u81EA\u8EAB\u306E\u653B\u6483\u529B\u306E100%\u306E\u7269\u7406\u30C0\u30E1\u30FC\u30B8\u3092\u4E0E\u3048\u308B"
+    m_consumptionMp: 0
     m_command:
     - rid: 2058801464653119489
   references:
