@@ -6,15 +6,18 @@ using UniRx;
 public class EnemyManager : CharactorManager
 {
     [SerializeField] Enemy m_enemyPrefab;
+    /// <summary>Œ»İí“¬’†‚Ì“G‚½‚¿</summary>
     public List<Enemy> CurrentEnemys { get; private set; } = new List<Enemy>();
 
     public override void Setup()
     {
         Create();
+        GameManager.Instance.CommandExecutor.EnemyDamageSubject.Subscribe(_ => GetDamage(_));
     }
 
-    protected override void OnDead()
+    public override void GetDamage(Command command)
     {
+        CurrentEnemys.ForEach(e => e.Damage(command));
     }
 
     protected override void Create()
@@ -26,5 +29,9 @@ public class EnemyManager : CharactorManager
             .Subscribe(x => OnDead())
             .AddTo(this);
         CurrentEnemys.Add(e);
+    }
+
+    protected override void OnDead()
+    {
     }
 }

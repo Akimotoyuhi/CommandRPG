@@ -6,6 +6,7 @@ public class Enemy : Charactor
 {
     protected override void Setup()
     {
+        IsPlayer = false;
         base.Setup();
     }
 
@@ -21,9 +22,14 @@ public class Enemy : Charactor
         SetUI();
     }
 
-    public override void OnAction()
+    public override void Action(int currentTrun)
     {
-        Debug.LogError("ìGçsìÆñ¢é¿ëï");
+
+    }
+
+    public override void Damage(Command command)
+    {
+        base.Damage(command);
     }
 
     protected override void Dead()

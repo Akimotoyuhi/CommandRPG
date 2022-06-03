@@ -6,10 +6,10 @@ public class Skill
 {
     private string m_name;
     private SkillID m_id;
-    private List<int[]> m_skillCommands = new List<int[]>();
+    private SkillDataBase m_dataBase;
     public string Name => m_name;
     public SkillID ID => m_id;
-    public List<int[]> SkillCommands { set => m_skillCommands = value; }
+    //public SkillDataBase SkillCommands { set => m_skillCommands = value; }
 
     public void Setup()
     {
