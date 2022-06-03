@@ -36,7 +36,7 @@ public class GUIManager : MonoBehaviour
         m_skillPanel.SetActive(false);
     }
 
-    public void ShowSkills(List<SkillID> skills)
+    private void ShowSkills(List<SkillID> skills)
     {
         m_skillPanel.SetActive(true);
         for (int i = 0; i < m_skillButtons.Count; i++)
