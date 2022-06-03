@@ -69,7 +69,7 @@ public class AttackSkill : ISkillCommand
                 ret.MagicDamage = charator.MagicPower * m_damageCoefficient;
                 break;
         }
-        GameManager.Instance.CommandExecutor.CommandExecute(ret);
+        GameManager.Instance.CommandExecute(ret);
     }
 }
 //public class BuffDebuffSkill : ISkillCommand

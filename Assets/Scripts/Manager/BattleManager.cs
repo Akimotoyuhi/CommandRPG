@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
 using System.Linq;
 
 public class BattleManager : MonoBehaviour
@@ -12,14 +13,20 @@ public class BattleManager : MonoBehaviour
     private bool m_skillSelectFlag = false;
     private Subject<List<SkillID>> m_showSkillSubject = new Subject<List<SkillID>>();
     private ReactiveProperty<int> m_turnChanged = new ReactiveProperty<int>();
+    private Subject<Command> m_playerDamageSubject = new Subject<Command>();
+    private Subject<Command> m_enemyDamageSubject = new Subject<Command>();
+    public IObservable<Command> PlayerDamageSubject => m_playerDamageSubject;
+    public IObservable<Command> EnemyDamageSubject => m_enemyDamageSubject;
     /// <summary>スキルを表示する</summary>
-    public System.IObservable<List<SkillID>> ShowSkillSubject => m_showSkillSubject;
+    public IObservable<List<SkillID>> ShowSkillSubject => m_showSkillSubject;
     /// <summary>ターンの更新を通知する</summary>
-    public System.IObservable<int> TurnChanged => m_turnChanged;
+    public IObservable<int> TurnChanged => m_turnChanged;
     public void Setup()
     {
         m_playerManager.Setup();
+        m_playerDamageSubject.Subscribe(_ => m_playerManager.GetDamage(_)).AddTo(m_playerManager);
         m_enemyManager.Setup();
+        m_enemyDamageSubject.Subscribe(_ => m_enemyManager.GetDamage(_)).AddTo(m_enemyManager);
         TurnChanged.Subscribe(turn =>
         {
             m_playerManager.CurrentTurn = turn;
@@ -81,5 +88,28 @@ public class BattleManager : MonoBehaviour
             if (!c.IsDead)
                 c.Action(m_currentTurn);
         });
+    }
+
+    public void CommandExecute(Command cmd)
+    {
+        switch (cmd.UseType)
+        {
+            case SkillUseType.Player:
+                m_playerDamageSubject.OnNext(cmd);
+                break;
+            case SkillUseType.Enemy:
+                m_enemyDamageSubject.OnNext(cmd);
+                break;
+            case SkillUseType.AllPlayers:
+                m_playerDamageSubject.OnNext(cmd);
+                break;
+            case SkillUseType.AllEnemies:
+                m_enemyDamageSubject.OnNext(cmd);
+                break;
+            case SkillUseType.Field:
+                m_playerDamageSubject.OnNext(cmd);
+                m_enemyDamageSubject.OnNext(cmd);
+                break;
+        }
     }
 }

@@ -12,7 +12,7 @@ public class EnemyManager : CharactorManager
     public override void Setup()
     {
         Create();
-        GameManager.Instance.CommandExecutor.EnemyDamageSubject.Subscribe(_ => GetDamage(_));
+        //GameManager.Instance.CommandExecutor.EnemyDamageSubject.Subscribe(_ => GetDamage(_));
     }
 
     public override void GetDamage(Command command)

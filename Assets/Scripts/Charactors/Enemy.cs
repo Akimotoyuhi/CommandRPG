@@ -30,6 +30,7 @@ public class Enemy : Charactor
     public override void Damage(Command command)
     {
         base.Damage(command);
+        SetUI();
     }
 
     protected override void Dead()

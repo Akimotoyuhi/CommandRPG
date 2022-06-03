@@ -71,9 +71,23 @@ public abstract class Charactor : MonoBehaviour
     public abstract void Action(int currentTrun);
 
     /// <summary>被ダメージ処理</summary>
-    public virtual void Damage(Command command)
+    public virtual void Damage(Command cmd)
     {
-        Debug.Log($"{Name}が{command.PhysicsDamage}ダメージを受けた");
+        int dmg;
+        if (cmd.PhysicsDamage != 0)
+        {
+            dmg = m_defence - cmd.PhysicsDamage;
+            if (dmg >= 0) //ダメージは最低でも１通るようにする
+                dmg = -1;
+            m_currentLife += dmg;
+        }
+        if (cmd.MagicDamage != 0)
+        {
+            dmg = m_magicDefence - cmd.MagicDamage;
+            if (dmg >= 0)
+                dmg = -1;
+            m_currentLife += dmg;
+        }
         if (m_currentLife <= 0)
             Dead();
     }

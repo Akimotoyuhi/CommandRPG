@@ -13,17 +13,6 @@ public class PlayerManager : CharactorManager
     /// <summary>現在戦闘中のプレイヤーたち</summary>
     public List<Player> CurrentPlayers { get; private set; } = new List<Player>();
     public List<SkillID> SelectSkills { get => m_selectSkills; }
-    /// <summary>現在のプレイヤー達が持ってるスキル</summary>
-    //public List<List<SkillID>> PlayersSkill
-    //{
-    //    get
-    //    {
-    //        var ret = new List<List<SkillID>>();
-    //        foreach (var p in CurrentPlayers)
-    //            ret.Add(p.HaveSkills);
-    //        return ret;
-    //    }
-    //}
 
     public override void Setup()
     {
@@ -31,8 +20,6 @@ public class PlayerManager : CharactorManager
         //for (int i = 0; i < m_maxPlayerNum; i++)
         //    Create();
         Create();
-        GameManager.Instance.CommandExecutor.PlayerDamageSubject.Subscribe(_ => GetDamage(_))
-            .AddTo(this);
     }
 
     /// <summary>プレイヤーたちに選択されたスキルを送る</summary>

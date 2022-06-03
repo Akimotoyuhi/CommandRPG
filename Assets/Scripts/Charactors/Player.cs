@@ -16,7 +16,6 @@ public class Player : Charactor
 
     protected override void Setup()
     {
-        Debug.Log("PlayerSetup");
         IsPlayer = true;
         base.Setup();
     }
@@ -47,6 +46,7 @@ public class Player : Charactor
     public override void Damage(Command command)
     {
         base.Damage(command);
+        SetUI();
     }
 
     protected override void Dead()
