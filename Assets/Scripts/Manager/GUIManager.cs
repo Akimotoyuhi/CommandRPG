@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UniRx;
 
 public class GUIManager : MonoBehaviour
 {
-    [SerializeField] GameObject m_skillPanel;
-    [SerializeField] int m_defaltSkillButtonNum = 55;
+    [Header("このクラス全体で使うもの")]
     [SerializeField] BattleManager m_battleManager;
+    [SerializeField] Text m_logText;
+    [Header("スキル関連")]
+    [SerializeField] GameObject m_skillPanel;
+    [SerializeField] int m_defaltSkillButtonNum = 50;
     [SerializeField] SkillButton m_skillButtonPrefab;
     [SerializeField] Transform m_buttonParent;
     private List<SkillButton> m_skillButtons = new List<SkillButton>();
@@ -23,8 +27,12 @@ public class GUIManager : MonoBehaviour
                 .Subscribe(_ =>
                 {
                     m_skillPanel.SetActive(false);
-                    m_battleManager.SkillSelected(_);
+                    //int i = _[]
+                    m_battleManager.SkillSelected(SkillID.NormalMagic);
                 })
+                .AddTo(this);
+            s.PointerSubject
+                .Subscribe(s => m_logText.text = s)
                 .AddTo(this);
             s.transform.SetParent(m_buttonParent);
             m_skillButtons.Add(s);

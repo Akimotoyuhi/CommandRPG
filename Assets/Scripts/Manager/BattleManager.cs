@@ -4,7 +4,9 @@ using UnityEngine;
 using UniRx;
 using System;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 
+/// <summary>バトル全体を管理する</summary>
 public class BattleManager : MonoBehaviour
 {
     [SerializeField] PlayerManager m_playerManager;
@@ -12,37 +14,45 @@ public class BattleManager : MonoBehaviour
     private int m_currentTurn;
     private bool m_skillSelectFlag = false;
     private Subject<List<SkillID>> m_showSkillSubject = new Subject<List<SkillID>>();
-    private ReactiveProperty<int> m_turnChanged = new ReactiveProperty<int>();
     private Subject<Command> m_playerDamageSubject = new Subject<Command>();
     private Subject<Command> m_enemyDamageSubject = new Subject<Command>();
     public IObservable<Command> PlayerDamageSubject => m_playerDamageSubject;
     public IObservable<Command> EnemyDamageSubject => m_enemyDamageSubject;
     /// <summary>スキルを表示する</summary>
     public IObservable<List<SkillID>> ShowSkillSubject => m_showSkillSubject;
-    /// <summary>ターンの更新を通知する</summary>
-    public IObservable<int> TurnChanged => m_turnChanged;
     public void Setup()
     {
+        m_currentTurn = 0;
         m_playerManager.Setup();
         m_playerDamageSubject.Subscribe(_ => m_playerManager.GetDamage(_)).AddTo(m_playerManager);
         m_enemyManager.Setup();
         m_enemyDamageSubject.Subscribe(_ => m_enemyManager.GetDamage(_)).AddTo(m_enemyManager);
-        TurnChanged.Subscribe(turn =>
-        {
-            m_playerManager.CurrentTurn = turn;
-            m_enemyManager.CurrentTurn = turn;
-        });
     }
 
     /// <summary>戦うボタンが押された処理<br/>unityのボタンから呼ばれる事を想定している</summary>
-    public void OnSkillSelect()
+    public async void OnSkillSelect()
     {
         m_currentTurn++;
-        m_turnChanged.Value = m_currentTurn;
-        StartCoroutine(OnSkillSelectAsync());
+        await OnSkillSelectAsync();
+        //UniTask.Void(async () =>
+        //{
+        //    for (int i = 0; i < m_playerManager.CurrentPlayers.Count; i++)
+        //    {
+        //        List<SkillID> vs = new List<SkillID>();
+        //        m_playerManager.CurrentPlayers[i].HaveSkills.ForEach(s => vs.Add(s.Id));
+        //        m_showSkillSubject.OnNext(vs);
+        //        m_skillSelectFlag = true;
+        //        while (m_skillSelectFlag) //スキル選択完了まで待つ
+        //            await UniTask.Yield();
+        //        Debug.Log($"{i}人目のスキル選択完了");
+        //    }
+        //    Debug.Log("全員のスキル選択完了");
+        //    m_playerManager.SetSkills();
+        //});
+        ActionExecute(SortCharactor());
     }
 
-    private IEnumerator OnSkillSelectAsync()
+    private async UniTask OnSkillSelectAsync()
     {
         for (int i = 0; i < m_playerManager.CurrentPlayers.Count; i++)
         {
@@ -51,13 +61,11 @@ public class BattleManager : MonoBehaviour
             m_showSkillSubject.OnNext(vs);
             m_skillSelectFlag = true;
             while (m_skillSelectFlag) //スキル選択完了まで待つ
-                yield return null;
+                await UniTask.Yield();
             Debug.Log($"{i}人目のスキル選択完了");
         }
         Debug.Log("全員のスキル選択完了");
-        m_showSkillSubject.OnCompleted();
         m_playerManager.SetSkills();
-        ActionExecute(SortCharactor());
     }
 
     /// <summary>スキルが選択された</summary>

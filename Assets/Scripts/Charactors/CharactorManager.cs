@@ -8,7 +8,6 @@ using UniRx;
 public abstract class CharactorManager : MonoBehaviour
 {
     [SerializeField] protected Transform m_prefabPos;
-    public int CurrentTurn { get; set; }
     public virtual void Setup() { }
     public abstract void GetDamage(Command command);
     protected abstract void OnDead();

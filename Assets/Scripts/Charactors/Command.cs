@@ -7,7 +7,7 @@ public struct Command
 {
     /// <summary>使用対象</summary>
     public SkillUseType UseType { get; set; }
-    /// <summary>このコマンドが作用する対象のindex<br/>全体なら-1、存在しない対象なら0となる</summary>
+    /// <summary>このコマンドが作用する対象listのindex<br/>全体なら-1、存在しない対象なら0となる</summary>
     public int UseCharctorIndex { get; set; }
     /// <summary>与える物理ダメージ</summary>
     public int PhysicsDamage { get; set; }

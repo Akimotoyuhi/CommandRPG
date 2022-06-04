@@ -15,15 +15,39 @@ public class EnemyDataBase
     [SerializeField] CharactorDataBase m_dataBase;
     [SerializeField] List<EnemyAction> m_aiList;
     public CharactorDataBase DataBase => m_dataBase;
-    public List<EnemyAction> AIList => m_aiList;
+    /// <summary>
+    /// 敵AIを評価して行動させる
+    /// </summary>
+    /// <param name="charactor">評価対象のクラス</param>
+    /// <param name="index">対象のindex</param>
+    /// <exception cref="System.Exception">行動が無い場合にスローされる例外</exception>
+    public void Action(Charactor charactor, int index, int currentTurn)
+    {
+        foreach (var ai in m_aiList)
+        {
+            if (ai.ActionExecute(charactor, index, currentTurn))
+                return;
+        }
+        throw new System.Exception("敵行動データが見つかりませんでした");
+    }
 }
 [System.Serializable]
 public class EnemyAction
 {
     [SerializeField] List<EnemyAI> m_aiList;
     [SerializeField] List<SkillID> m_skillList;
-    public List<EnemyAI> EnemyAiList => m_aiList;
-    public List<SkillID> SkillList => m_skillList;
+    public bool ActionExecute(Charactor charactor, int index, int currentTurn)
+    {
+        foreach (var ai in m_aiList)
+        {
+            //AI評価　一つでもfalseなら失敗
+            if (!ai.Evaluation(charactor))
+                return false;
+        }
+        //成功したらその下にあるスキルを全て実行
+        m_skillList.ForEach(skill => GameManager.Instance.SkillData.GetSkillData(skill).Execute(charactor, index));
+        return true;
+    }
 }
 [System.Serializable]
 public class EnemyAI
@@ -32,7 +56,7 @@ public class EnemyAI
     [SerializeField] EvaluationType m_evaluationType;
     [SerializeField] int value;
 
-    public bool Evaluation()
+    public bool Evaluation(Charactor charactor)
     {
         if (m_evaluationType == EvaluationType.Any)
             return true;

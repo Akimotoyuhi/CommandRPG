@@ -31,6 +31,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>魔法攻撃力<br/>バフデバフの追加後はここで評価する事</summary>
     public int MagicPower => m_magicPower;
     public float CurrentSpeed => m_speed;
+    public int Index { get; set; }
     public bool IsPlayer { get; protected set; }
     /// <summary>行動終了フラグ</summary>
     public bool IsActionFinished { get; set; }
@@ -80,6 +81,7 @@ public abstract class Charactor : MonoBehaviour
             if (dmg >= 0) //ダメージは最低でも１通るようにする
                 dmg = -1;
             m_currentLife += dmg;
+            Debug.Log($"{Name}は{dmg}ダメージを受けた");
         }
         if (cmd.MagicDamage != 0)
         {

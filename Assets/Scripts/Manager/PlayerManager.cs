@@ -41,6 +41,7 @@ public class PlayerManager : CharactorManager
         Player p = Instantiate(m_playerPrefab);
         p.transform.SetParent(m_prefabPos);
         p.SetBaseData(GameManager.Instance.PlayerData.DataBases[0]);
+        p.Index = 0;
         p.DeadSubject
             .Subscribe(_ => OnDead())
             .AddTo(this);

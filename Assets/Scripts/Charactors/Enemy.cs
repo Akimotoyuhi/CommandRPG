@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy : Charactor
 {
+    private EnemyDataBase m_enemyDataBase;
+
     protected override void Setup()
     {
         IsPlayer = false;
@@ -18,13 +20,14 @@ public class Enemy : Charactor
 
     public void SetBaseData(EnemyDataBase enemyDataBase)
     {
+        m_enemyDataBase = enemyDataBase;
         SetParametor(enemyDataBase.DataBase);
         SetUI();
     }
 
     public override void Action(int currentTrun)
     {
-
+        m_enemyDataBase.Action(this, 0, currentTrun);
     }
 
     public override void Damage(Command command)

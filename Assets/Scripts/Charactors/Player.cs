@@ -39,8 +39,7 @@ public class Player : Charactor
 
     public override void Action(int currentTrun)
     {
-        var db = GameManager.Instance.SkillData.GetSkillData(m_currentTurnSkill);
-        db.Commands.ForEach(c => c.Execute(this, 0));
+        GameManager.Instance.SkillData.GetSkillData(m_currentTurnSkill).Execute(this, 0);
     }
 
     public override void Damage(Command command)

@@ -25,40 +25,33 @@ public class SkillDataBase
     [SerializeField] SkillID m_id;
     [SerializeField, TextArea] string m_tooltip;
     [SerializeField] int m_consumptionMp;
+    [SerializeField] SkillUseType m_useType;
     [SerializeReference, SubclassSelector] List<ISkillCommand> m_commands;
     public string Name => m_name;
     public SkillID Id => m_id;
     public string Tooltip => m_tooltip;
-    //public List<Command> SkillCommand
-    //{
-    //    get
-    //    {
-    //        var ret = new List<Command>();
-    //        foreach (var c in m_command)
-    //        {
-    //            ret.Add(c.Execute());
-    //        }
-    //        return ret;
-    //    }
-    //}
-    public List<ISkillCommand> Commands => m_commands;
+    public int ConsumptionMp => m_consumptionMp;
+    public SkillUseType UseType => m_useType;
+    public void Execute(Charactor charator, int index)
+    {
+        m_commands.ForEach(c => c.Execute(m_useType, charator, index));
+    }
 }
 public interface ISkillCommand
 {
-    void Execute(Charactor charator, int index);
+    void Execute(SkillUseType useType, Charactor charator, int index);
 }
 public class AttackSkill : ISkillCommand
 {
-    [SerializeField] SkillUseType m_useType;
     [SerializeField] AttackType m_attackType;
     [SerializeField] int m_damageCoefficient;
-    public void Execute(Charactor charator, int index)
+    public void Execute(SkillUseType useType, Charactor charator, int index)
     {
         Command ret = new Command();
-        if (m_useType == SkillUseType.Dependence)
+        if (useType == SkillUseType.Dependence)
             ret.UseType = charator.IsPlayer ? SkillUseType.Enemy : SkillUseType.Player;
         else
-            ret.UseType = m_useType;
+            ret.UseType = useType;
         ret.UseCharctorIndex = index;
         switch (m_attackType)
         {
