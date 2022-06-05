@@ -13,13 +13,13 @@ public class BattleManager : MonoBehaviour
     [SerializeField] EnemyManager m_enemyManager;
     private int m_currentTurn;
     private bool m_skillSelectFlag = false;
-    private Subject<List<SkillID>> m_showSkillSubject = new Subject<List<SkillID>>();
+    private Subject<List<SkillDataBase>> m_showSkillSubject = new Subject<List<SkillDataBase>>();
     private Subject<Command> m_playerDamageSubject = new Subject<Command>();
     private Subject<Command> m_enemyDamageSubject = new Subject<Command>();
     public IObservable<Command> PlayerDamageSubject => m_playerDamageSubject;
     public IObservable<Command> EnemyDamageSubject => m_enemyDamageSubject;
     /// <summary>スキルを表示する</summary>
-    public IObservable<List<SkillID>> ShowSkillSubject => m_showSkillSubject;
+    public IObservable<List<SkillDataBase>> ShowSkillSubject => m_showSkillSubject;
     public void Setup()
     {
         m_currentTurn = 0;
@@ -34,21 +34,6 @@ public class BattleManager : MonoBehaviour
     {
         m_currentTurn++;
         await OnSkillSelectAsync();
-        //UniTask.Void(async () =>
-        //{
-        //    for (int i = 0; i < m_playerManager.CurrentPlayers.Count; i++)
-        //    {
-        //        List<SkillID> vs = new List<SkillID>();
-        //        m_playerManager.CurrentPlayers[i].HaveSkills.ForEach(s => vs.Add(s.Id));
-        //        m_showSkillSubject.OnNext(vs);
-        //        m_skillSelectFlag = true;
-        //        while (m_skillSelectFlag) //スキル選択完了まで待つ
-        //            await UniTask.Yield();
-        //        Debug.Log($"{i}人目のスキル選択完了");
-        //    }
-        //    Debug.Log("全員のスキル選択完了");
-        //    m_playerManager.SetSkills();
-        //});
         ActionExecute(SortCharactor());
     }
 
@@ -56,8 +41,8 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < m_playerManager.CurrentPlayers.Count; i++)
         {
-            List<SkillID> vs = new List<SkillID>();
-            m_playerManager.CurrentPlayers[i].HaveSkills.ForEach(s => vs.Add(s.Id));
+            List<SkillDataBase> vs = new List<SkillDataBase>();
+            m_playerManager.CurrentPlayers[i].HaveSkills.ForEach(s => vs.Add(s));
             m_showSkillSubject.OnNext(vs);
             m_skillSelectFlag = true;
             while (m_skillSelectFlag) //スキル選択完了まで待つ
@@ -70,9 +55,9 @@ public class BattleManager : MonoBehaviour
 
     /// <summary>スキルが選択された</summary>
     /// <param name="skillID"></param>
-    public void SkillSelected(SkillID skillID)
+    public void SkillSelected(SkillDataBase dataBase)
     {
-        m_playerManager.SelectSkills.Add(skillID);
+        m_playerManager.SelectSkills.Add(dataBase);
         m_skillSelectFlag = false; //スキル選択を完了
     }
 

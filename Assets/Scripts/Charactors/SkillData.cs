@@ -12,7 +12,7 @@ public class SkillData : ScriptableObject
         foreach (var item in m_dataBases)
         {
             if (item.Id == skillID)
-                return item;
+                return item.Copy();
         }
         throw new System.IndexOutOfRangeException($"使用されていないIDが使用されました 渡されたID{skillID}(IDNumber{(int)skillID})");
     }
@@ -31,7 +31,8 @@ public class SkillDataBase
     public SkillID Id => m_id;
     public string Tooltip => m_tooltip;
     public int ConsumptionMp => m_consumptionMp;
-    public SkillUseType UseType => m_useType;
+    public SkillUseType UseType { get => m_useType; set => m_useType = value; }
+    public SkillDataBase Copy() => (SkillDataBase)MemberwiseClone();
     public void Execute(Charactor charator, int index)
     {
         m_commands.ForEach(c => c.Execute(m_useType, charator, index));

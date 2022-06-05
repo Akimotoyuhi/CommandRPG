@@ -17,14 +17,32 @@ MonoBehaviour:
     m_id: 0
     m_tooltip: "\u65751\u4F53\u306B\u81EA\u8EAB\u306E\u653B\u6483\u529B\u3068\u540C\u3058\u91CF\u306E\u7269\u7406\u30C0\u30E1\u30FC\u30B8\u3092\u4E0E\u3048\u308B"
     m_consumptionMp: 0
+    m_useType: 0
     m_commands:
     - rid: 2058801515062362112
+  - m_name: "\u901A\u5E38\u653B\u6483(\u8853)"
+    m_id: 1
+    m_tooltip: "\u65751\u4F53\u306B\u81EA\u8EAB\u306E\u653B\u6483\u529B\u3068\u540C\u3058\u91CF\u306E\u9B54\u6CD5\u30C0\u30E1\u30FC\u30B8\u3092\u4E0E\u3048\u308B"
+    m_consumptionMp: 0
+    m_useType: 0
+    m_commands:
+    - rid: 2058801561209405440
+  - m_name: 
+    m_id: 0
+    m_tooltip: "\u65751\u4F53\u306B\u81EA\u8EAB\u306E\u653B\u6483\u529B\u3068\u540C\u3058\u91CF\u306E\u7269\u7406\u30C0\u30E1\u30FC\u30B8\u3092\u4E0E\u3048\u308B"
+    m_consumptionMp: 0
+    m_useType: 0
+    m_commands: []
   references:
     version: 2
     RefIds:
     - rid: 2058801515062362112
       type: {class: AttackSkill, ns: , asm: Assembly-CSharp}
       data:
-        m_useType: 0
         m_attackType: 0
+        m_damageCoefficient: 1
+    - rid: 2058801561209405440
+      type: {class: AttackSkill, ns: , asm: Assembly-CSharp}
+      data:
+        m_attackType: 1
         m_damageCoefficient: 1

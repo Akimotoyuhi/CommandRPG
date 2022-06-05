@@ -10,9 +10,9 @@ public class Player : Charactor
     [SerializeField] Text m_magicSliderText;
     private PlayerDataBase m_playerDataBase;
     private List<SkillDataBase> m_haveSkills = new List<SkillDataBase>();
-    private SkillID m_currentTurnSkill;
+    private SkillDataBase m_currentTurnSkill;
     public List<SkillDataBase> HaveSkills => m_haveSkills;
-    public SkillID CurrentTurnSkill { set => m_currentTurnSkill = value; }
+    public SkillDataBase CurrentTurnSkill { set => m_currentTurnSkill = value; }
 
     protected override void Setup()
     {
@@ -33,13 +33,20 @@ public class Player : Charactor
     public void SetBaseData(PlayerDataBase playerDataBase)
     {
         SetParametor(playerDataBase.DataBase);
-        playerDataBase.SkillData.HaveSkills.ForEach(s => m_haveSkills.Add(GameManager.Instance.SkillData.GetSkillData(s)));
+        playerDataBase.SkillData.HaveSkills.ForEach(s =>
+        {
+            SkillDataBase db = GameManager.Instance.SkillData.GetSkillData(s);
+            if (db.UseType == SkillUseType.Dependence)
+                db.UseType = SkillUseType.Enemy;
+            m_haveSkills.Add(db);
+        });
         Setup();
     }
 
     public override void Action(int currentTrun)
     {
-        GameManager.Instance.SkillData.GetSkillData(m_currentTurnSkill).Execute(this, 0);
+        m_currentTurnSkill.Execute(this, 0);
+        //GameManager.Instance.SkillData.GetSkillData(m_currentTurnSkill).Execute(this, 0);
     }
 
     public override void Damage(Command command)

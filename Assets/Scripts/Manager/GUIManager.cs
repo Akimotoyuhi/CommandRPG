@@ -24,11 +24,10 @@ public class GUIManager : MonoBehaviour
             SkillButton s = Instantiate(m_skillButtonPrefab);
             s.Setup();
             s.OnClickSubject
-                .Subscribe(_ =>
+                .Subscribe(sdb =>
                 {
                     m_skillPanel.SetActive(false);
-                    //int i = _[]
-                    m_battleManager.SkillSelected(SkillID.NormalMagic);
+                    m_battleManager.SkillSelected(sdb);
                 })
                 .AddTo(this);
             s.PointerSubject
@@ -44,13 +43,13 @@ public class GUIManager : MonoBehaviour
         m_skillPanel.SetActive(false);
     }
 
-    private void ShowSkills(List<SkillID> skills)
+    private void ShowSkills(List<SkillDataBase> skills)
     {
         m_skillPanel.SetActive(true);
         for (int i = 0; i < m_skillButtons.Count; i++)
         {
             if (i < skills.Count)
-                m_skillButtons[i].Setup(GameManager.Instance.SkillData.DataBases[(int)skills[i]]);
+                m_skillButtons[i].Setup(skills[i]);
             else
                 m_skillButtons[i].Setup();
         }

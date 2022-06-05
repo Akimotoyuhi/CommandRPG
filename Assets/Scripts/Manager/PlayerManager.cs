@@ -7,12 +7,12 @@ public class PlayerManager : CharactorManager
 {
     [SerializeField] Player m_playerPrefab;
     /// <summary>スキル選択画面で選択されたスキル達</summary>
-    private List<SkillID> m_selectSkills = new List<SkillID>();
+    private List<SkillDataBase> m_selectSkills = new List<SkillDataBase>();
     /// <summary>戦闘に出せるプレイヤーの最大数</summary>
     private const int m_maxPlayerNum = 4;
     /// <summary>現在戦闘中のプレイヤーたち</summary>
     public List<Player> CurrentPlayers { get; private set; } = new List<Player>();
-    public List<SkillID> SelectSkills { get => m_selectSkills; }
+    public List<SkillDataBase> SelectSkills { get => m_selectSkills; }
 
     public override void Setup()
     {
