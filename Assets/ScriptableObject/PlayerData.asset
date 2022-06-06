@@ -25,3 +25,15 @@ MonoBehaviour:
       m_speed: 80
     m_skillData:
       m_haveSkills: 00000000
+  - m_dataBase:
+      m_name: "\u30A8\u30E9\u30C8"
+      m_sprite: {fileID: 21300000, guid: 33527b9d79934b54d9e41dcb64c48681, type: 3}
+      m_life: 60
+      m_magicPoint: 200
+      m_power: 30
+      m_magicPower: 80
+      m_defence: 10
+      m_magicDefence: 30
+      m_speed: 30
+    m_skillData:
+      m_haveSkills: 01000000

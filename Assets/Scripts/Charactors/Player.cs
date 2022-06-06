@@ -10,9 +10,13 @@ public class Player : Charactor
     [SerializeField] Text m_magicSliderText;
     private PlayerDataBase m_playerDataBase;
     private List<SkillDataBase> m_haveSkills = new List<SkillDataBase>();
+    /// <summary>このターン使用予定のスキル</summary>
     private SkillDataBase m_currentTurnSkill;
+    /// <summary>このターン使用するスキルの使用対象</summary>
+    private int m_currentTurnSkillIndex;
     public List<SkillDataBase> HaveSkills => m_haveSkills;
     public SkillDataBase CurrentTurnSkill { set => m_currentTurnSkill = value; }
+    public int CurrentTurnSkillIndex { set => m_currentTurnSkillIndex = value; }
 
     protected override void Setup()
     {

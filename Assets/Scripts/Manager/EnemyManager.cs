@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using Cysharp.Threading.Tasks;
 
 public class EnemyManager : CharactorManager
 {
@@ -11,7 +12,7 @@ public class EnemyManager : CharactorManager
 
     public override void Setup()
     {
-        Create();
+        Create(0);
         //GameManager.Instance.CommandExecutor.EnemyDamageSubject.Subscribe(_ => GetDamage(_));
     }
 
@@ -20,11 +21,11 @@ public class EnemyManager : CharactorManager
         CurrentEnemys.ForEach(e => e.Damage(command));
     }
 
-    protected override void Create()
+    protected override void Create(int dataIndex)
     {
         Enemy e = Instantiate(m_enemyPrefab);
         e.transform.SetParent(m_prefabPos);
-        e.SetBaseData(GameManager.Instance.EnemyData.DataBases[0]);
+        e.SetBaseData(GameManager.Instance.EnemyData.DataBases[dataIndex]);
         e.Index = 0;
         e.DeadSubject
             .Subscribe(x => OnDead())

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-
+public enum Popup
+{ }
 
 public class GUILayoutEnum : EditorWindow
 {

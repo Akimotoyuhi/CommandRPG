@@ -4,8 +4,9 @@ using UnityEngine;
 using UniRx;
 using System;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public abstract class Charactor : MonoBehaviour
+public abstract class Charactor : MonoBehaviour, IPointerDownHandler
 {
     #region field
     [SerializeField] protected Image m_image;
@@ -23,6 +24,7 @@ public abstract class Charactor : MonoBehaviour
     protected int m_skillUseIndex;
     private bool m_isDead = false;
     private AsyncSubject<Unit> m_deadSubject = new AsyncSubject<Unit>();
+    private Subject<int> m_onCharactorClickSubject = new Subject<int>();
     #endregion
     #region property
     public string Name => m_name;
@@ -38,6 +40,7 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>éuñ]îªíË</summary>
     public bool IsDead => m_isDead;
     public IObservable<Unit> DeadSubject => m_deadSubject;
+    public IObservable<int> OnCharactorClickSubject => m_onCharactorClickSubject;
     #endregion
 
     protected virtual void Setup()
@@ -97,9 +100,15 @@ public abstract class Charactor : MonoBehaviour
     /// <summary>éÄñSéûÇÃèàóù</summary>
     protected virtual void Dead()
     {
+        Debug.Log($"{Name}Ç™ì|Ç≥ÇÍÇΩ");
         m_isDead = true;
         m_deadSubject.OnNext(Unit.Default);
         m_deadSubject.OnCompleted();
         m_deadSubject.Dispose();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        m_onCharactorClickSubject.OnNext(Index);
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using Cysharp.Threading.Tasks;
 
 public class PlayerManager : CharactorManager
 {
@@ -19,16 +20,18 @@ public class PlayerManager : CharactorManager
         //とりあえず生成
         //for (int i = 0; i < m_maxPlayerNum; i++)
         //    Create();
-        Create();
+        Create(0);
+        Create(1);
     }
 
-    /// <summary>プレイヤーたちに選択されたスキルを送る</summary>
+    /// <summary>プレイヤーたちに選択されたスキルを設定</summary>
     public void SetSkills()
     {
         for (int i = 0; i < CurrentPlayers.Count; i++)
         {
             CurrentPlayers[i].CurrentTurnSkill = m_selectSkills[i];
         }
+        m_selectSkills.Clear();
     }
 
     public override void GetDamage(Command command)
@@ -36,11 +39,11 @@ public class PlayerManager : CharactorManager
         CurrentPlayers.ForEach(p => p.Damage(command));
     }
 
-    protected override void Create()
+    protected override void Create(int dataIndex)
     {
         Player p = Instantiate(m_playerPrefab);
         p.transform.SetParent(m_prefabPos);
-        p.SetBaseData(GameManager.Instance.PlayerData.DataBases[0]);
+        p.SetBaseData(GameManager.Instance.PlayerData.DataBases[dataIndex]);
         p.Index = 0;
         p.DeadSubject
             .Subscribe(_ => OnDead())

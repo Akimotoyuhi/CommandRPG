@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniRx;
+using Cysharp.Threading.Tasks;
+
 /// <summary>
 /// プレイヤーやエネミーの管理をするクラスの基底
 /// </summary>
@@ -11,5 +12,5 @@ public abstract class CharactorManager : MonoBehaviour
     public virtual void Setup() { }
     public abstract void GetDamage(Command command);
     protected abstract void OnDead();
-    protected abstract void Create();
+    protected abstract void Create(int dataIndex);
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
+using System;
 
 public class GUIManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class GUIManager : MonoBehaviour
     [SerializeField] SkillButton m_skillButtonPrefab;
     [SerializeField] Transform m_buttonParent;
     private List<SkillButton> m_skillButtons = new List<SkillButton>();
+    private static ReactiveProperty<string> m_reactiveText = new ReactiveProperty<string>();
+    public static IObservable<string> ReactiveText => m_reactiveText;
 
     public void Setup()
     {
@@ -27,6 +30,7 @@ public class GUIManager : MonoBehaviour
                 .Subscribe(sdb =>
                 {
                     m_skillPanel.SetActive(false);
+                    m_logText.text = "";
                     m_battleManager.SkillSelected(sdb);
                 })
                 .AddTo(this);
@@ -41,6 +45,7 @@ public class GUIManager : MonoBehaviour
             .AddTo(this);
 
         m_skillPanel.SetActive(false);
+        m_logText.text = "";
     }
 
     private void ShowSkills(List<SkillDataBase> skills)
