@@ -18,7 +18,7 @@ public class Sample : MonoBehaviour
             Debug.Log("3•b‘Ò‚Â");
             await Observable.Timer(TimeSpan.FromSeconds(3));
             Debug.Log("3•b‘Ò‚Á‚½");
-            m_rp.Value = 1;
+            m_rp.Value = 0;
         });
         await m_rp;
         Debug.Log("’l‚ª•Ï‚í‚Á‚½");

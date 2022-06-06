@@ -40,7 +40,7 @@ public class BattleManager : MonoBehaviour
             .Where(_ => m_onPlayerClickStay)
             .Subscribe(i =>
             {
-                m_onClickCharactorIndex.Value = i;
+                m_onClickCharactorIndex.SetValueAndForceNotify(i);
                 m_onPlayerClickStay = false;
             })
             .AddTo(this);
@@ -51,7 +51,7 @@ public class BattleManager : MonoBehaviour
             .Where(_ => m_onEnemyClickStay)
             .Subscribe(i =>
             {
-                m_onClickCharactorIndex.Value = i;
+                m_onClickCharactorIndex.SetValueAndForceNotify(i);
                 m_onEnemyClickStay = false;
             })
             .AddTo(this);
