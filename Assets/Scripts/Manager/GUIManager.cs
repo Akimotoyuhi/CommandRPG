@@ -5,12 +5,16 @@ using UnityEngine.UI;
 using UniRx;
 using System;
 
+/// <summary>
+/// ゲーム全体のUIの制御
+/// </summary>
 public class GUIManager : MonoBehaviour
 {
     [Header("このクラス全体で使うもの")]
     [SerializeField] BattleManager m_battleManager;
     [SerializeField] Text m_logText;
-    [Header("戦闘画面")]
+    [Header("戦闘画面系")]
+    [SerializeField] GameObject m_battlePanel;
     [SerializeField] Button m_battleButton;
     [Header("スキル関連")]
     [SerializeField] GameObject m_skillPanel;
@@ -24,6 +28,14 @@ public class GUIManager : MonoBehaviour
 
     public void Setup()
     {
+        GameManager.Instance.GameStateObsarvable.Subscribe(s =>
+        {
+            if (s == GameState.Battle)
+                m_battlePanel.SetActive(true);
+            else
+                m_battlePanel.SetActive(false);
+        }).AddTo(this);
+
         //とりあえずボタン沢山生成
         for (int i = 0; i < m_defaltSkillButtonNum; i++)
         {
@@ -48,27 +60,38 @@ public class GUIManager : MonoBehaviour
         //バトルの状態を見てUIの制御
         m_battleManager.BattleFazeObservable.Subscribe(f =>
         {
-            switch (f)
-            {
-                case BattleFaze.Idle:
-                    m_skillPanel.SetActive(false);
-                    m_battleButton.interactable = true;
-                    break;
-                case BattleFaze.SkillSelect:
-                    m_skillPanel.SetActive(true);
-                    m_battleButton.interactable = false;
-                    break;
-                case BattleFaze.TargetSelectToPlayer:
-                    m_skillPanel.SetActive(false);
-                    m_battleButton.interactable = false;
-                    break;
-                case BattleFaze.TargetSelectToEnemy:
-                    m_skillPanel.SetActive(false);
-                    m_battleButton.interactable = false;
-                    break;
-                default:
-                    break;
-            }
+            if (f == BattleFaze.Idle)
+                m_battleButton.interactable = true;
+            else
+                m_battleButton.interactable = false;
+
+            if (f == BattleFaze.SkillSelect)
+                m_skillPanel.SetActive(true);
+            else
+                m_skillPanel.SetActive(false);
+            #region 
+            //switch (f)
+            //{
+            //    case BattleFaze.Idle:
+            //        m_skillPanel.SetActive(false);
+            //        m_battleButton.interactable = true;
+            //        break;
+            //    case BattleFaze.SkillSelect:
+            //        m_skillPanel.SetActive(true);
+            //        m_battleButton.interactable = false;
+            //        break;
+            //    case BattleFaze.TargetSelectToPlayer:
+            //        m_skillPanel.SetActive(false);
+            //        m_battleButton.interactable = false;
+            //        break;
+            //    case BattleFaze.TargetSelectToEnemy:
+            //        m_skillPanel.SetActive(false);
+            //        m_battleButton.interactable = false;
+            //        break;
+            //    default:
+            //        break;
+            //}
+            #endregion
         }).AddTo(this);
         m_battleButton.onClick.AddListener(() => m_battleManager.SkillSelect());
 

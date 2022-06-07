@@ -29,13 +29,17 @@ public class Enemy : Charactor
 
     public override void Action(int currentTrun)
     {
-        Debug.Log($"çUåÇëŒè€ index:{m_skillUseIndex}");
         m_enemyDataBase.Action(this, m_skillUseIndex, currentTrun);
     }
 
-    public override void Damage(Command command)
+    public override void Damage(Command cmd)
     {
-        base.Damage(command);
+        if (cmd.UseType == SkillUseType.Enemy)
+        {
+            if (cmd.UseCharctorIndex != Index)
+                return;
+        }
+        base.Damage(cmd);
         SetUI();
     }
 

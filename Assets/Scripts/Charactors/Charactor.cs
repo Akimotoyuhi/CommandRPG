@@ -86,8 +86,6 @@ public abstract class Charactor : MonoBehaviour, IPointerDownHandler
     /// <summary>”íƒ_ƒ[ƒWˆ—</summary>
     public virtual void Damage(Command cmd)
     {
-        if (cmd.UseCharctorIndex != Index)
-            return;
         int dmg;
         if (cmd.PhysicsDamage != 0)
         {

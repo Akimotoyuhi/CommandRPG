@@ -66,9 +66,14 @@ public class Player : Charactor
         //GameManager.Instance.SkillData.GetSkillData(m_currentTurnSkill).Execute(this, 0);
     }
 
-    public override void Damage(Command command)
+    public override void Damage(Command cmd)
     {
-        base.Damage(command);
+        if (cmd.UseType == SkillUseType.Player)
+        {
+            if (cmd.UseCharctorIndex != Index)
+                return;
+        }
+        base.Damage(cmd);
         SetUI();
     }
 

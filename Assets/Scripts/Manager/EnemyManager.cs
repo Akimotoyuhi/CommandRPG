@@ -12,8 +12,8 @@ public class EnemyManager : CharactorManager
 
     public override void Setup()
     {
+        //‚Æ‚è‚Ü¶¬
         Create(0);
-        //GameManager.Instance.CommandExecutor.EnemyDamageSubject.Subscribe(_ => GetDamage(_));
     }
 
     public override void GetDamage(Command command)
@@ -26,7 +26,7 @@ public class EnemyManager : CharactorManager
         Enemy e = Instantiate(m_enemyPrefab);
         e.transform.SetParent(m_prefabPos, false);
         e.SetBaseData(GameManager.Instance.EnemyData.DataBases[dataIndex]);
-        e.Index = 0;
+        e.Index = CurrentEnemys.Count;
         e.DeadSubject
             .Subscribe(x => OnDead())
             .AddTo(this);
@@ -35,5 +35,6 @@ public class EnemyManager : CharactorManager
 
     protected override void OnDead()
     {
+        Debug.Log("‚È‚ñ‚©‚µ‚ñ‚¾");
     }
 }

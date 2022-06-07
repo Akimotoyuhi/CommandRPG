@@ -18,6 +18,8 @@ public class BattleManager : MonoBehaviour
     private bool m_onPlayerClickStay = false;
     /// <summary>Enemyのクリック待機フラグ</summary>
     private bool m_onEnemyClickStay = false;
+    /// <summary>対象選択中awaitするかのフラグ</summary>
+    private bool m_targetSelectAwaitFlag = false;
     private Subject<List<SkillDataBase>> m_showSkillSubject = new Subject<List<SkillDataBase>>();
     private Subject<Command> m_playerDamageSubject = new Subject<Command>();
     private Subject<Command> m_enemyDamageSubject = new Subject<Command>();
@@ -84,13 +86,15 @@ public class BattleManager : MonoBehaviour
             while (m_skillSelectFlag) //スキル選択完了まで待つ
                 await UniTask.Yield();
             GUIManager.ReactiveText.Value = "使用対象を選択";
-            Debug.Log("対象選択待ち");
-            await m_onClickCharactorIndex; //対象選択を待つ
+            if (m_targetSelectAwaitFlag)
+            {
+                Debug.Log("対象選択待ち");
+                await m_onClickCharactorIndex; //対象選択を待つ
+            }
             m_playerManager.CurrentPlayers[m_playerIndex].CurrentTurnSkillIndex = m_onClickCharactorIndex.Value;
             Debug.Log($"{m_playerIndex}人目のスキル選択完了");
         }
         Debug.Log("全員のスキル選択完了");
-        //m_playerManager.SetSkills();
     }
 
     /// <summary>スキルが選択された</summary>
@@ -106,19 +110,23 @@ public class BattleManager : MonoBehaviour
                     c.DependenceUseType = SkillUseType.Enemy;
                     m_battleFaze.Value = BattleFaze.TargetSelectToEnemy;
                     m_onEnemyClickStay = true;
+                    m_targetSelectAwaitFlag = true;
                     break;
                 case SkillUseType.Player:
                     m_battleFaze.Value = BattleFaze.TargetSelectToPlayer;
                     m_onPlayerClickStay = true;
+                    m_targetSelectAwaitFlag = true;
                     break;
                 case SkillUseType.Enemy:
                     m_battleFaze.Value = BattleFaze.TargetSelectToEnemy;
                     m_onEnemyClickStay = true;
+                    m_targetSelectAwaitFlag = true;
                     break;
                 default:
                     break;
             }
-            await m_onClickCharactorIndex;
+            if (m_targetSelectAwaitFlag)
+                await m_onClickCharactorIndex;
         });
 
         //m_playerManager.SelectSkills.Add(dataBase);
@@ -175,6 +183,7 @@ public class BattleManager : MonoBehaviour
     }
 }
 
+/// <summary>バトル中の状態</summary>
 public enum BattleFaze
 {
     Idle,

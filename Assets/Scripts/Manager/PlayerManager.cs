@@ -22,16 +22,6 @@ public class PlayerManager : CharactorManager
         Create(1);
     }
 
-    /// <summary>プレイヤーたちに選択されたスキルを設定</summary>
-    //public void SetSkills()
-    //{
-    //    for (int i = 0; i < CurrentPlayers.Count; i++)
-    //    {
-    //        CurrentPlayers[i].CurrentTurnSkill = m_selectSkills[i];
-    //    }
-    //    m_selectSkills.Clear();
-    //}
-
     public override void GetDamage(Command command)
     {
         CurrentPlayers.ForEach(p => p.Damage(command));
@@ -51,6 +41,6 @@ public class PlayerManager : CharactorManager
 
     protected override void OnDead()
     {
-
+        Debug.Log("なんかしんだ");
     }
 }
