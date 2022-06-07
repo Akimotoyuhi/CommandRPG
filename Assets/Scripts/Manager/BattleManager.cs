@@ -76,7 +76,8 @@ public class BattleManager : MonoBehaviour
             m_skillSelectFlag = true;
             while (m_skillSelectFlag) //スキル選択完了まで待つ
                 await UniTask.Yield();
-            Debug.Log("対象選択待ち");
+            GUIManager.ReactiveText.Value = "使用対象を選択";
+            //Debug.Log("対象選択待ち");
             await m_onClickCharactorIndex; //対象選択を待つ
             m_playerManager.CurrentPlayers[m_playerIndex].CurrentTurnSkillIndex = m_onClickCharactorIndex.Value;
             Debug.Log($"{m_playerIndex}人目のスキル選択完了");
@@ -90,11 +91,29 @@ public class BattleManager : MonoBehaviour
     public void SkillSelected(SkillDataBase dataBase)
     {
         m_playerManager.CurrentPlayers[m_playerIndex].CurrentTurnSkill = dataBase;
-        Debug.Log(dataBase.UseType);
-        if (dataBase.UseType == SkillUseType.Player)
-            m_onPlayerClickStay = true;
-        if (dataBase.UseType == SkillUseType.Enemy)
-            m_onEnemyClickStay = true;
+        dataBase.Commands.ForEach(async c =>
+        {
+            Debug.Log(c.UseType);
+            switch (c.UseType)
+            {
+                case SkillUseType.Dependence:
+                    c.DependenceUseType = SkillUseType.Enemy;
+                    m_onEnemyClickStay = true;
+                    break;
+                case SkillUseType.Player:
+                    m_onPlayerClickStay = true;
+                    break;
+                case SkillUseType.Enemy:
+                    m_onEnemyClickStay = true;
+                    break;
+                default:
+                    break;
+            }
+            Debug.Log("選択を待機");
+            await m_onClickCharactorIndex;
+            Debug.Log("待機完了");
+        });
+
         //m_playerManager.SelectSkills.Add(dataBase);
         m_skillSelectFlag = false; //スキル選択を完了
     }

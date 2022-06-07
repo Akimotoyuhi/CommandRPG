@@ -6,7 +6,7 @@ using UnityEngine;
 public class SkillData : ScriptableObject
 {
     [SerializeField] List<SkillDataBase> m_dataBases;
-    public List<SkillDataBase> DataBases => m_dataBases;
+    //public List<SkillDataBase> DataBases => m_dataBases;
     public SkillDataBase GetSkillData(SkillID skillID)
     {
         foreach (var item in m_dataBases)
@@ -25,42 +25,50 @@ public class SkillDataBase
     [SerializeField] SkillID m_id;
     [SerializeField, TextArea] string m_tooltip;
     [SerializeField] int m_consumptionMp;
-    [SerializeField] SkillUseType m_useType;
     [SerializeReference, SubclassSelector] List<ISkillCommand> m_commands;
     public string Name => m_name;
     public SkillID Id => m_id;
     public string Tooltip => m_tooltip;
     public int ConsumptionMp => m_consumptionMp;
-    public SkillUseType UseType { get => m_useType; set => m_useType = value; }
+    public List<ISkillCommand> Commands => m_commands;
     public SkillDataBase Copy() => (SkillDataBase)MemberwiseClone();
     public void Execute(Charactor charator, int index)
     {
-        m_commands.ForEach(c => c.Execute(m_useType, charator, index));
+        m_commands.ForEach(c => c.Execute(charator, index));
     }
 }
 public interface ISkillCommand
 {
-    void Execute(SkillUseType useType, Charactor charator, int index);
+    void Execute(Charactor charator, int index);
+    SkillUseType UseType { get; }
+    SkillUseType DependenceUseType { get; set; }
 }
 public class AttackSkill : ISkillCommand
 {
+    [SerializeField] SkillUseType m_useType;
     [SerializeField] AttackType m_attackType;
-    [SerializeField] int m_damageCoefficient;
-    public void Execute(SkillUseType useType, Charactor charator, int index)
+    [SerializeField] float m_damageCoefficient;
+    private SkillUseType m_setUseType;
+    public SkillUseType UseType { get => m_useType; }
+    public SkillUseType DependenceUseType { get => m_setUseType; set => m_setUseType = value; }
+    public void Execute(Charactor charator, int index)
     {
         Command ret = new Command();
-        if (useType == SkillUseType.Dependence)
-            ret.UseType = charator.IsPlayer ? SkillUseType.Enemy : SkillUseType.Player;
+        if (m_useType == SkillUseType.Dependence)
+            ret.UseType = m_setUseType;
         else
-            ret.UseType = useType;
+            ret.UseType = m_useType;
         ret.UseCharctorIndex = index;
+        float f;
         switch (m_attackType)
         {
             case AttackType.Physics:
-                ret.PhysicsDamage = charator.Power * m_damageCoefficient;
+                f = charator.Power * m_damageCoefficient;
+                ret.PhysicsDamage = (int)f;
                 break;
             case AttackType.Magic:
-                ret.MagicDamage = charator.MagicPower * m_damageCoefficient;
+                f = charator.MagicPower * m_damageCoefficient;
+                ret.MagicDamage = (int)f;
                 break;
         }
         GameManager.Instance.CommandExecute(ret);
@@ -80,6 +88,7 @@ public enum SkillID
 {
     NormalAttack,
     NormalMagic,
+    RenzokuKougeki,
 }
 public enum AttackType
 {

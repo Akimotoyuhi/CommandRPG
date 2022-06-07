@@ -15,9 +15,7 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private string m_tooltip;
     private SkillUseType m_useType;
     private Subject<SkillDataBase> m_onclickSubject = new Subject<SkillDataBase>();
-    private Subject<string> m_pointerSubject = new Subject<string>();
     public bool IsActive { get; set; }
-    public System.IObservable<string> PointerSubject => m_pointerSubject;
     public System.IObservable<SkillDataBase> OnClickSubject => m_onclickSubject;
 
     public void Setup(SkillDataBase skillDataBase = null)
@@ -34,26 +32,25 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             m_name = skillDataBase.Name;
             m_tooltip = skillDataBase.Tooltip;
             m_image.color = Color.white;
-            m_useType = skillDataBase.UseType;
+            //m_useType = skillDataBase.UseType;
             m_text.text = m_name;
             m_button.enabled = true;
             m_button.onClick.AddListener(() => m_onclickSubject.OnNext(skillDataBase));
         }
     }
 
-    public void OnClick()
-    {
-        //m_onclickSubject.OnNext(new List<int> { (int)m_skillId, (int)m_useType });
-    }
+    //public void OnClick()
+    //{
+    //    //m_onclickSubject.OnNext(new List<int> { (int)m_skillId, (int)m_useType });
+    //}
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        m_pointerSubject.OnNext(m_tooltip);
+        GUIManager.ReactiveText.Value = m_tooltip;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        m_pointerSubject.OnNext("");
     }
 }
 

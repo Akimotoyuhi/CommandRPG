@@ -24,7 +24,7 @@ public class EnemyManager : CharactorManager
     protected override void Create(int dataIndex)
     {
         Enemy e = Instantiate(m_enemyPrefab);
-        e.transform.SetParent(m_prefabPos);
+        e.transform.SetParent(m_prefabPos, false);
         e.SetBaseData(GameManager.Instance.EnemyData.DataBases[dataIndex]);
         e.Index = 0;
         e.DeadSubject

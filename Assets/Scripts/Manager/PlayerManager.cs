@@ -25,14 +25,14 @@ public class PlayerManager : CharactorManager
     }
 
     /// <summary>プレイヤーたちに選択されたスキルを設定</summary>
-    public void SetSkills()
-    {
-        for (int i = 0; i < CurrentPlayers.Count; i++)
-        {
-            CurrentPlayers[i].CurrentTurnSkill = m_selectSkills[i];
-        }
-        m_selectSkills.Clear();
-    }
+    //public void SetSkills()
+    //{
+    //    for (int i = 0; i < CurrentPlayers.Count; i++)
+    //    {
+    //        CurrentPlayers[i].CurrentTurnSkill = m_selectSkills[i];
+    //    }
+    //    m_selectSkills.Clear();
+    //}
 
     public override void GetDamage(Command command)
     {
@@ -42,7 +42,7 @@ public class PlayerManager : CharactorManager
     protected override void Create(int dataIndex)
     {
         Player p = Instantiate(m_playerPrefab);
-        p.transform.SetParent(m_prefabPos);
+        p.transform.SetParent(m_prefabPos, false);
         p.SetBaseData(GameManager.Instance.PlayerData.DataBases[dataIndex]);
         p.Index = 0;
         p.DeadSubject

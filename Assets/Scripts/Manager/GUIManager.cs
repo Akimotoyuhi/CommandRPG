@@ -16,8 +16,8 @@ public class GUIManager : MonoBehaviour
     [SerializeField] SkillButton m_skillButtonPrefab;
     [SerializeField] Transform m_buttonParent;
     private List<SkillButton> m_skillButtons = new List<SkillButton>();
-    private static ReactiveProperty<string> m_reactiveText = new ReactiveProperty<string>();
-    public static IObservable<string> ReactiveText => m_reactiveText;
+    public static ReactiveProperty<string> ReactiveText { get; } = new ReactiveProperty<string>();
+    private IObservable<string> ReactiveTextObservable => ReactiveText;
 
     public void Setup()
     {
@@ -30,19 +30,18 @@ public class GUIManager : MonoBehaviour
                 .Subscribe(sdb =>
                 {
                     m_skillPanel.SetActive(false);
-                    m_logText.text = "";
                     m_battleManager.SkillSelected(sdb);
                 })
                 .AddTo(this);
-            s.PointerSubject
-                .Subscribe(s => m_logText.text = s)
-                .AddTo(this);
-            s.transform.SetParent(m_buttonParent);
+            s.transform.SetParent(m_buttonParent, false);
             m_skillButtons.Add(s);
         }
+
         m_battleManager.ShowSkillSubject
             .Subscribe(_ => ShowSkills(_))
             .AddTo(this);
+
+        ReactiveTextObservable.Subscribe(_ => m_logText.text = ReactiveText.Value);
 
         m_skillPanel.SetActive(false);
         m_logText.text = "";

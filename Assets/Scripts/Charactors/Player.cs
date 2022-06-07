@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UniRx;
 
 public class Player : Charactor
 {
@@ -22,6 +23,17 @@ public class Player : Charactor
     {
         IsPlayer = true;
         base.Setup();
+        //OnLifeChanged.Subscribe(_ =>
+        //{
+        //    m_lifeSlider.value = m_reactiveLife.Value;
+        //    m_lifeSliderText.text = m_reactiveLife.Value.ToString();
+        //});
+        //OnMpChanged.Subscribe(_ =>
+        //{
+        //    m_magicSlider.value = m_reactiveMp.Value;
+        //    m_magicSliderText.text = m_reactiveMp.Value.ToString();
+        //});
+        SetUI();
     }
 
     protected override void SetUI()
@@ -40,8 +52,11 @@ public class Player : Charactor
         playerDataBase.SkillData.HaveSkills.ForEach(s =>
         {
             SkillDataBase db = GameManager.Instance.SkillData.GetSkillData(s);
-            if (db.UseType == SkillUseType.Dependence)
-                db.UseType = SkillUseType.Enemy;
+            db.Commands.ForEach(c =>
+            {
+                if (c.UseType == SkillUseType.Dependence)
+                c.DependenceUseType = SkillUseType.Enemy;
+            });
             m_haveSkills.Add(db);
         });
         Setup();
@@ -49,7 +64,7 @@ public class Player : Charactor
 
     public override void Action(int currentTrun)
     {
-        m_currentTurnSkill.Execute(this, 0);
+        m_currentTurnSkill.Execute(this, m_currentTurnSkillIndex);
         //GameManager.Instance.SkillData.GetSkillData(m_currentTurnSkill).Execute(this, 0);
     }
 

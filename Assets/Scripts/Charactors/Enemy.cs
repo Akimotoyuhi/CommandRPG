@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class Enemy : Charactor
 {
@@ -10,6 +11,7 @@ public class Enemy : Charactor
     {
         IsPlayer = false;
         base.Setup();
+        OnLifeChanged.Subscribe(_ => m_lifeSlider.value = m_reactiveLife.Value);
     }
 
     protected override void SetUI()

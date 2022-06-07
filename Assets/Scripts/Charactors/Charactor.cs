@@ -25,6 +25,8 @@ public abstract class Charactor : MonoBehaviour, IPointerDownHandler
     private bool m_isDead = false;
     private AsyncSubject<Unit> m_deadSubject = new AsyncSubject<Unit>();
     private Subject<int> m_onCharactorClickSubject = new Subject<int>();
+    protected ReactiveProperty<int> m_reactiveLife = new ReactiveProperty<int>();
+    protected ReactiveProperty<int> m_reactiveMp = new ReactiveProperty<int>();
     #endregion
     #region property
     public string Name => m_name;
@@ -41,6 +43,8 @@ public abstract class Charactor : MonoBehaviour, IPointerDownHandler
     public bool IsDead => m_isDead;
     public IObservable<Unit> DeadSubject => m_deadSubject;
     public IObservable<int> OnCharactorClickSubject => m_onCharactorClickSubject;
+    protected IObservable<int> OnLifeChanged => m_reactiveLife;
+    protected IObservable<int> OnMpChanged => m_reactiveMp;
     #endregion
 
     protected virtual void Setup()
