@@ -10,11 +10,14 @@ public class GUIManager : MonoBehaviour
     [Header("このクラス全体で使うもの")]
     [SerializeField] BattleManager m_battleManager;
     [SerializeField] Text m_logText;
+    [Header("戦闘画面")]
+    [SerializeField] Button m_battleButton;
     [Header("スキル関連")]
     [SerializeField] GameObject m_skillPanel;
     [SerializeField] int m_defaltSkillButtonNum = 50;
     [SerializeField] SkillButton m_skillButtonPrefab;
     [SerializeField] Transform m_buttonParent;
+    /// <summary>スキルを表示するボタン</summary>
     private List<SkillButton> m_skillButtons = new List<SkillButton>();
     public static ReactiveProperty<string> ReactiveText { get; } = new ReactiveProperty<string>();
     private IObservable<string> ReactiveTextObservable => ReactiveText;
@@ -29,6 +32,7 @@ public class GUIManager : MonoBehaviour
             s.OnClickSubject
                 .Subscribe(sdb =>
                 {
+                    //ボタンがクリックされた時
                     m_skillPanel.SetActive(false);
                     m_battleManager.SkillSelected(sdb);
                 })
@@ -37,11 +41,37 @@ public class GUIManager : MonoBehaviour
             m_skillButtons.Add(s);
         }
 
+        //スキル一覧の表示
         m_battleManager.ShowSkillSubject
             .Subscribe(_ => ShowSkills(_))
             .AddTo(this);
 
+        //バトルの状態を見てUIの制御
+        m_battleManager.BattleFazeObservable.Subscribe(f =>
+        {
+            switch (f)
+            {
+                case BattleFaze.Idle:
+                    m_battleButton.interactable = true;
+                    break;
+                case BattleFaze.SkillSelect:
+                    m_battleButton.interactable = false;
+                    break;
+                case BattleFaze.TargetSelectToPlayer:
+                    m_battleButton.interactable = false;
+                    break;
+                case BattleFaze.TargetSelectToEnemy:
+                    m_battleButton.interactable = false;
+                    break;
+                default:
+                    break;
+            }
+        }).AddTo(this);
+        m_battleButton.onClick.AddListener(() => m_battleManager.SkillSelect());
+
+        //ReactiveTextの変更を検知してlogテキストを書き換え
         ReactiveTextObservable.Subscribe(_ => m_logText.text = ReactiveText.Value).AddTo(this);
+
         m_skillPanel.SetActive(false);
         m_logText.text = "";
     }

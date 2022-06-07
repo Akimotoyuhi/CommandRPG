@@ -232,8 +232,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_battleManager: {fileID: 51357018}
   m_logText: {fileID: 1360912949}
+  m_battleButton: {fileID: 350947731}
   m_skillPanel: {fileID: 1083136920}
-  m_defaltSkillButtonNum: 55
+  m_defaltSkillButtonNum: 50
   m_skillButtonPrefab: {fileID: 5176940434851560209, guid: c3f89bf545ef35744bf41a755eea17dd, type: 3}
   m_buttonParent: {fileID: 1737103735}
 --- !u!1 &121628124

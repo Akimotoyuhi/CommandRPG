@@ -21,12 +21,17 @@ public class BattleManager : MonoBehaviour
     private Subject<List<SkillDataBase>> m_showSkillSubject = new Subject<List<SkillDataBase>>();
     private Subject<Command> m_playerDamageSubject = new Subject<Command>();
     private Subject<Command> m_enemyDamageSubject = new Subject<Command>();
+    /// <summary>キャラクターがクリックされたら発行されるイベント</summary>
     private ReactiveProperty<int> m_onClickCharactorIndex = new ReactiveProperty<int>();
+    private ReactiveProperty<BattleFaze> m_battleFaze = new ReactiveProperty<BattleFaze>();
+    /// <summary>Player達に効果を与えるイベント</summary>
     public IObservable<Command> PlayerDamageSubject => m_playerDamageSubject;
+    /// <summary>Enemy達に効果を与えるイベント</summary>
     public IObservable<Command> EnemyDamageSubject => m_enemyDamageSubject;
     /// <summary>スキルを表示する</summary>
     public IObservable<List<SkillDataBase>> ShowSkillSubject => m_showSkillSubject;
-    //public IObservable<int> OnClickCharactorIndex => m_onClickCharactorIndex;
+    /// <summary>現在のBattleの状態を知らせる</summary>
+    public IObservable<BattleFaze> BattleFazeObservable => m_battleFaze;
     public void Setup()
     {
         m_currentTurn = 0;
@@ -58,12 +63,14 @@ public class BattleManager : MonoBehaviour
         });
     }
 
-    /// <summary>戦うボタンが押された処理<br/>unityのボタンから呼ばれる事を想定している</summary>
-    public async void OnSkillSelect()
+    /// <summary>スキル選択画面の開始</summary>
+    public async void SkillSelect()
     {
-        m_currentTurn++;
+        m_currentTurn++;//とりま
+        m_battleFaze.Value = BattleFaze.SkillSelect;
         await OnSkillSelectAsync();
         ActionExecute(SortCharactor());
+        m_battleFaze.Value = BattleFaze.Idle;
     }
 
     private async UniTask OnSkillSelectAsync()
@@ -79,7 +86,6 @@ public class BattleManager : MonoBehaviour
             GUIManager.ReactiveText.Value = "使用対象を選択";
             Debug.Log("対象選択待ち");
             await m_onClickCharactorIndex; //対象選択を待つ
-            Debug.Log($"m_onClickCharactorIndex.Value : {m_onClickCharactorIndex.Value}");
             m_playerManager.CurrentPlayers[m_playerIndex].CurrentTurnSkillIndex = m_onClickCharactorIndex.Value;
             Debug.Log($"{m_playerIndex}人目のスキル選択完了");
         }
@@ -101,9 +107,11 @@ public class BattleManager : MonoBehaviour
                     m_onEnemyClickStay = true;
                     break;
                 case SkillUseType.Player:
+                    m_battleFaze.Value = BattleFaze.TargetSelectToPlayer;
                     m_onPlayerClickStay = true;
                     break;
                 case SkillUseType.Enemy:
+                    m_battleFaze.Value = BattleFaze.TargetSelectToEnemy;
                     m_onEnemyClickStay = true;
                     break;
                 default:
@@ -164,4 +172,12 @@ public class BattleManager : MonoBehaviour
                 break;
         }
     }
+}
+
+public enum BattleFaze
+{
+    Idle,
+    SkillSelect,
+    TargetSelectToPlayer,
+    TargetSelectToEnemy,
 }
