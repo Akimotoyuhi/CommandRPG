@@ -21,6 +21,7 @@ public abstract class Charactor : MonoBehaviour, IPointerDownHandler
     protected int m_defence;
     protected int m_magicDefence;
     protected float m_speed;
+    /// <summary>攻撃対象のindex</summary>
     protected int m_skillUseIndex;
     private bool m_isDead = false;
     private AsyncSubject<Unit> m_deadSubject = new AsyncSubject<Unit>();
@@ -30,12 +31,16 @@ public abstract class Charactor : MonoBehaviour, IPointerDownHandler
     #endregion
     #region property
     public string Name => m_name;
-    /// <summary>攻撃力<br/>バフデバフの追加後はここで評価する事</summary>
+    /// <summary>攻撃力</summary>
     public int Power => m_power;
-    /// <summary>魔法攻撃力<br/>バフデバフの追加後はここで評価する事</summary>
+    /// <summary>魔法攻撃力</summary>
     public int MagicPower => m_magicPower;
+    /// <summary>素早さ</summary>
     public float CurrentSpeed => m_speed;
+    /// <summary>自身の所属index</summary>
     public int Index { get; set; }
+    /// <summary>このターンの攻撃対象のindex</summary>
+    public int CurrentTurnSkillIndex { set => m_skillUseIndex = value; }
     public bool IsPlayer { get; protected set; }
     /// <summary>行動終了フラグ</summary>
     public bool IsActionFinished { get; set; }
@@ -81,6 +86,8 @@ public abstract class Charactor : MonoBehaviour, IPointerDownHandler
     /// <summary>被ダメージ処理</summary>
     public virtual void Damage(Command cmd)
     {
+        if (cmd.UseCharctorIndex != Index)
+            return;
         int dmg;
         if (cmd.PhysicsDamage != 0)
         {
@@ -88,7 +95,7 @@ public abstract class Charactor : MonoBehaviour, IPointerDownHandler
             if (dmg >= 0) //ダメージは最低でも１通るようにする
                 dmg = -1;
             m_currentLife += dmg;
-            Debug.Log($"{Name}は{dmg}ダメージを受けた");
+            Debug.Log($"{Name}は{dmg}の物理ダメージを受けた");
         }
         if (cmd.MagicDamage != 0)
         {
@@ -96,6 +103,7 @@ public abstract class Charactor : MonoBehaviour, IPointerDownHandler
             if (dmg >= 0)
                 dmg = -1;
             m_currentLife += dmg;
+            Debug.Log($"{Name}は{dmg}の魔法ダメージを受けた");
         }
         if (m_currentLife <= 0)
             Dead();
@@ -113,6 +121,7 @@ public abstract class Charactor : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        Debug.Log($"{Index}がクリックされた");
         m_onCharactorClickSubject.OnNext(Index);
     }
 }

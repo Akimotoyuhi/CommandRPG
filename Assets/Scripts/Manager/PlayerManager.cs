@@ -18,8 +18,6 @@ public class PlayerManager : CharactorManager
     public override void Setup()
     {
         //Ç∆ÇËÇ†Ç¶Ç∏ê∂ê¨
-        //for (int i = 0; i < m_maxPlayerNum; i++)
-        //    Create();
         Create(0);
         Create(1);
     }
@@ -44,7 +42,7 @@ public class PlayerManager : CharactorManager
         Player p = Instantiate(m_playerPrefab);
         p.transform.SetParent(m_prefabPos, false);
         p.SetBaseData(GameManager.Instance.PlayerData.DataBases[dataIndex]);
-        p.Index = 0;
+        p.Index = CurrentPlayers.Count;
         p.DeadSubject
             .Subscribe(_ => OnDead())
             .AddTo(this);

@@ -41,8 +41,7 @@ public class GUIManager : MonoBehaviour
             .Subscribe(_ => ShowSkills(_))
             .AddTo(this);
 
-        ReactiveTextObservable.Subscribe(_ => m_logText.text = ReactiveText.Value);
-
+        ReactiveTextObservable.Subscribe(_ => m_logText.text = ReactiveText.Value).AddTo(this);
         m_skillPanel.SetActive(false);
         m_logText.text = "";
     }

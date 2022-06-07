@@ -77,8 +77,9 @@ public class BattleManager : MonoBehaviour
             while (m_skillSelectFlag) //スキル選択完了まで待つ
                 await UniTask.Yield();
             GUIManager.ReactiveText.Value = "使用対象を選択";
-            //Debug.Log("対象選択待ち");
+            Debug.Log("対象選択待ち");
             await m_onClickCharactorIndex; //対象選択を待つ
+            Debug.Log($"m_onClickCharactorIndex.Value : {m_onClickCharactorIndex.Value}");
             m_playerManager.CurrentPlayers[m_playerIndex].CurrentTurnSkillIndex = m_onClickCharactorIndex.Value;
             Debug.Log($"{m_playerIndex}人目のスキル選択完了");
         }
@@ -93,7 +94,6 @@ public class BattleManager : MonoBehaviour
         m_playerManager.CurrentPlayers[m_playerIndex].CurrentTurnSkill = dataBase;
         dataBase.Commands.ForEach(async c =>
         {
-            Debug.Log(c.UseType);
             switch (c.UseType)
             {
                 case SkillUseType.Dependence:
@@ -109,9 +109,7 @@ public class BattleManager : MonoBehaviour
                 default:
                     break;
             }
-            Debug.Log("選択を待機");
             await m_onClickCharactorIndex;
-            Debug.Log("待機完了");
         });
 
         //m_playerManager.SelectSkills.Add(dataBase);
@@ -136,7 +134,11 @@ public class BattleManager : MonoBehaviour
         charactors.ForEach(c =>
         {
             if (!c.IsDead)
+            {
+                if (!c.IsPlayer)
+                    c.CurrentTurnSkillIndex = UnityEngine.Random.Range(0, m_playerManager.CurrentPlayers.Count);
                 c.Action(m_currentTurn);
+            }
         });
     }
 

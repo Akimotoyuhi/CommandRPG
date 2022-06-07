@@ -13,11 +13,8 @@ public class Player : Charactor
     private List<SkillDataBase> m_haveSkills = new List<SkillDataBase>();
     /// <summary>このターン使用予定のスキル</summary>
     private SkillDataBase m_currentTurnSkill;
-    /// <summary>このターン使用するスキルの使用対象</summary>
-    private int m_currentTurnSkillIndex;
     public List<SkillDataBase> HaveSkills => m_haveSkills;
     public SkillDataBase CurrentTurnSkill { set => m_currentTurnSkill = value; }
-    public int CurrentTurnSkillIndex { set => m_currentTurnSkillIndex = value; }
 
     protected override void Setup()
     {
@@ -64,7 +61,8 @@ public class Player : Charactor
 
     public override void Action(int currentTrun)
     {
-        m_currentTurnSkill.Execute(this, m_currentTurnSkillIndex);
+        Debug.Log($"{Name}が{m_currentTurnSkill.Name}を敵index{m_skillUseIndex}に実行");
+        m_currentTurnSkill.Execute(this, m_skillUseIndex);
         //GameManager.Instance.SkillData.GetSkillData(m_currentTurnSkill).Execute(this, 0);
     }
 

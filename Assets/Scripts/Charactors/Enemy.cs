@@ -29,7 +29,8 @@ public class Enemy : Charactor
 
     public override void Action(int currentTrun)
     {
-        m_enemyDataBase.Action(this, 0, currentTrun);
+        Debug.Log($"UŒ‚‘ÎÛ index:{m_skillUseIndex}");
+        m_enemyDataBase.Action(this, m_skillUseIndex, currentTrun);
     }
 
     public override void Damage(Command command)

@@ -55,7 +55,12 @@ public class AttackSkill : ISkillCommand
     {
         Command ret = new Command();
         if (m_useType == SkillUseType.Dependence)
-            ret.UseType = m_setUseType;
+        {
+            if (!charator.IsPlayer)
+                ret.UseType = SkillUseType.Player;
+            else
+                ret.UseType = m_setUseType;
+        }
         else
             ret.UseType = m_useType;
         ret.UseCharctorIndex = index;
