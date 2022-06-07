@@ -67,7 +67,6 @@ public class BattleManager : MonoBehaviour
     public async void SkillSelect()
     {
         m_currentTurn++;//‚Æ‚è‚Ü
-        m_battleFaze.Value = BattleFaze.SkillSelect;
         await OnSkillSelectAsync();
         ActionExecute(SortCharactor());
         m_battleFaze.Value = BattleFaze.Idle;
@@ -80,6 +79,7 @@ public class BattleManager : MonoBehaviour
             List<SkillDataBase> vs = new List<SkillDataBase>();
             m_playerManager.CurrentPlayers[m_playerIndex].HaveSkills.ForEach(s => vs.Add(s));
             m_showSkillSubject.OnNext(vs);
+            m_battleFaze.Value = BattleFaze.SkillSelect;
             m_skillSelectFlag = true;
             while (m_skillSelectFlag) //ƒXƒLƒ‹‘I‘ðŠ®—¹‚Ü‚Å‘Ò‚Â
                 await UniTask.Yield();
@@ -104,6 +104,7 @@ public class BattleManager : MonoBehaviour
             {
                 case SkillUseType.Dependence:
                     c.DependenceUseType = SkillUseType.Enemy;
+                    m_battleFaze.Value = BattleFaze.TargetSelectToEnemy;
                     m_onEnemyClickStay = true;
                     break;
                 case SkillUseType.Player:

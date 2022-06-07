@@ -32,8 +32,7 @@ public class GUIManager : MonoBehaviour
             s.OnClickSubject
                 .Subscribe(sdb =>
                 {
-                    //ボタンがクリックされた時
-                    m_skillPanel.SetActive(false);
+                    //スキルボタンがクリックされた時
                     m_battleManager.SkillSelected(sdb);
                 })
                 .AddTo(this);
@@ -52,15 +51,19 @@ public class GUIManager : MonoBehaviour
             switch (f)
             {
                 case BattleFaze.Idle:
+                    m_skillPanel.SetActive(false);
                     m_battleButton.interactable = true;
                     break;
                 case BattleFaze.SkillSelect:
+                    m_skillPanel.SetActive(true);
                     m_battleButton.interactable = false;
                     break;
                 case BattleFaze.TargetSelectToPlayer:
+                    m_skillPanel.SetActive(false);
                     m_battleButton.interactable = false;
                     break;
                 case BattleFaze.TargetSelectToEnemy:
+                    m_skillPanel.SetActive(false);
                     m_battleButton.interactable = false;
                     break;
                 default:
@@ -78,7 +81,6 @@ public class GUIManager : MonoBehaviour
 
     private void ShowSkills(List<SkillDataBase> skills)
     {
-        m_skillPanel.SetActive(true);
         for (int i = 0; i < m_skillButtons.Count; i++)
         {
             if (i < skills.Count)
